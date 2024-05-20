@@ -1,7 +1,8 @@
 import argparse
 from argparse import RawTextHelpFormatter
+import os
 
-# Test
+
 # For testing, remember to `pip install argparser` in your terminal
 # To run MotifSeeker in terminal, `python MotifSeeker.py -h`
 
@@ -10,16 +11,20 @@ from argparse import RawTextHelpFormatter
 # Create parser #
 parser = argparse.ArgumentParser(description= 'Welcome to MotifSeeker!\n', formatter_class=RawTextHelpFormatter)
 
+# Input file, we want it to work on peaks.txt files #
+# TODO: maybe add .bed files as input too?
+parser.add_argument("peak", help="Peaks.txt file", type=str)
+
+# Other arguments #
+parser.add_argument("genome", help="Genome", type=str)
 
 
-# Create subparsers #
+
+# Output #
+# parser.add_argument("-o", "--out", help="Write output to file." \
+#   "Default: stdout", metavar="FILE", type=str, required=False)
 
 
-
-
-# Define arguments here #
-# parser.add_argument('-return', type=int, help="Test return an int")
-    
 # Parse arguments here #
 args = parser.parse_args()
     
