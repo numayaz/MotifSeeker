@@ -1,7 +1,7 @@
 import argparse
 from argparse import RawTextHelpFormatter
 
-
+# Test
 # For testing, remember to `pip install argparser` in your terminal
 # To run MotifSeeker in terminal, `python MotifSeeker.py -h`
 
