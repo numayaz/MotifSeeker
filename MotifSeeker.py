@@ -1,11 +1,15 @@
+# Imports #
+# argparse: Python command line interface
+# numpy, bed_reader: Parse .bed file
+
 import argparse
 from argparse import RawTextHelpFormatter
 import os
 import sys
 import numpy as np
-from bed_reader import open_bed
+from bed_reader import open_bed, sample_
 
-# For testing, remember to `pip install argparser` in your terminal
+# For testing, remember to `pip install argparser` `pip install numpy` `pip install bed-reader`
 # To run MotifSeeker in terminal, `python MotifSeeker.py -h`
 # Here's how HOMER performs MEF (http://homer.ucsd.edu/homer/ngs/peakMotifs.html)
 
@@ -35,4 +39,6 @@ if args.out is None:
 else: outf = open(args.out, "w")
 
 # Load and parse BED
+file_name = sample_file(input)
+
 
