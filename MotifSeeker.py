@@ -7,7 +7,7 @@ from argparse import RawTextHelpFormatter
 import os
 import sys
 import numpy as np
-from bed_reader import open_bed, sample_
+from bed_reader import open_bed, sample_file
 
 # `pip install argparser` `pip install numpy` `pip install bed-reader[samples,sparse]`
 # To run MotifSeeker in terminal, `python MotifSeeker.py -h`
@@ -17,11 +17,11 @@ from bed_reader import open_bed, sample_
 parser = argparse.ArgumentParser(description= 'Welcome to MotifSeeker!\n', formatter_class=RawTextHelpFormatter)
 
 # Input file, we want it to work on .bed files #
-parser.add_argument("input", help=".bed file", type=str)
+parser.add_argument("inputfile", help=".bed file", type=str)
 
 
 # Other arguments #
-parser.add_argument("genome", help="Genome", type=str)
+#parser.add_argument("genome", help="Genome", type=str)
 
 
 
@@ -36,9 +36,14 @@ args = parser.parse_args()
 # Setup output file
 if args.out is None:
     outf = sys.stdout
-else: outf = open(args.out, "w")
+else: 
+    outf = open(args.out, "w")
 
-# Load and parse BED
-bedfile = open_bed(sample_file(input))
+# Load and parse BED using bed_reader
+filename = sample_file(args.inputfile)
+bed = open_bed(filename)
+val = bed.read()
 
-
+# Test
+print(val.shape)
+del bed
