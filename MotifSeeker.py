@@ -2,6 +2,8 @@ import argparse
 from argparse import RawTextHelpFormatter
 import os
 import sys
+import numpy as np
+from bed_reader import open_bed
 
 # For testing, remember to `pip install argparser` in your terminal
 # To run MotifSeeker in terminal, `python MotifSeeker.py -h`
@@ -33,7 +35,4 @@ if args.out is None:
 else: outf = open(args.out, "w")
 
 # Load and parse BED
-with open(args.input) as f:
-    for line in f:
-        L = line.strip().split()
-    # Do something here
+
