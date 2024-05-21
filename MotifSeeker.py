@@ -9,7 +9,7 @@ import sys
 import numpy as np
 from bed_reader import open_bed, sample_
 
-# For testing, remember to `pip install argparser` `pip install numpy` `pip install bed-reader`
+# `pip install argparser` `pip install numpy` `pip install bed-reader[samples,sparse]`
 # To run MotifSeeker in terminal, `python MotifSeeker.py -h`
 # Here's how HOMER performs MEF (http://homer.ucsd.edu/homer/ngs/peakMotifs.html)
 
@@ -39,6 +39,6 @@ if args.out is None:
 else: outf = open(args.out, "w")
 
 # Load and parse BED
-file_name = sample_file(input)
+bedfile = open_bed(sample_file(input))
 
 
