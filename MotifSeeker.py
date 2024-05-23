@@ -13,24 +13,21 @@ from bed_reader import open_bed, sample_file
 # To run MotifSeeker in terminal, `python MotifSeeker.py -h`
 # Here's how HOMER performs MEF (http://homer.ucsd.edu/homer/ngs/peakMotifs.html)
 
-# Create parser #
-parser = argparse.ArgumentParser(description= 'Welcome to MotifSeeker!\n', formatter_class=RawTextHelpFormatter)
+# Create parser
+parser = argparse.ArgumentParser(prog="MotifSeeker", description= "Command-line tool to perform Motif Enrichment Analysis", formatter_class=RawTextHelpFormatter)
 
 # Input file, we want it to work on .bed files #
 parser.add_argument("inputfile", help=".bed file", type=str)
 
-
-# Other arguments #
-#parser.add_argument("genome", help="Genome", type=str)
-
-
-
-# Output #
+# Output
 parser.add_argument("-o", "--out", help="Write output to file." \
-    "Default: stdout", metavar="FILE", type=str, required=False)
+                    "Default: stdout", metavar="FILE", type=str, required=False)
 
+# Other arguments
+parser.add_argument("-r", "--ref", help="fasta reference genome file", \
+                    metavar="FILE", type=str, required=False)
 
-# Parse arguments here #
+# Parse arguments here
 args = parser.parse_args()
     
 # Setup output file
