@@ -6,7 +6,11 @@ This was created as a final project for Professor Melissa Gymrek's CSE 185 class
 
 Installation requires some libraries to be present, which can be installed in the following way using `pip`:
 
-```pip install argparser numpy bed-reader[samples,sparse]```
+```pip install argparser```
+
+```pip install numpy```
+
+```pip install bed-reader```
 
 ## Usage instructions
 
