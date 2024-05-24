@@ -12,7 +12,7 @@ def ERROR(msg):
 	msg : str
 	   Error message to print
 	"""
-	sys.stderr.write("{msg}\n".format(msg=msg) )
+	sys.stderr.write("[ERROR]: " + "{msg}\n".format(msg=msg) )
 	sys.exit(1)
 
 def GetPFM(sequences):
