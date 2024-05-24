@@ -57,7 +57,7 @@ motifseeker example_files/test.bed example_files/test.fa
 ### Input file format requirements
 
 The BED file should have a minimum of 6 tab separated columns (additional columns will be ignored)
-(Read the [HOMER documentation](http://homer.ucsd.edu/homer/ngs/peakMotifs.html#:~:text=The%20findMotifsGenome.pl%20program%20is,the%20enrichment%20of%20known%20motifs.) for more on acceptable input files)
+(Read the [HOMER documentation](http://homer.ucsd.edu/homer/ngs/peakMotifs.html#:~:text=The%20findMotifsGenome.pl%20program%20is,the%20enrichment%20of%20known%20motifs. target="_blank") for more on acceptable input files)
 - Column1: chromosome
 - Column2: starting position
 - Column3: ending position
