@@ -20,8 +20,8 @@ They can be installed using `pip`:
 To install our tool, you can run the following commands:
 
 ```
-git clone https://github.com/kyrafetter/spyglass.git
-cd MotifSeeker
+git clone https://github.com/jhii7/MotifSeeker.git
+cd motifseeker
 python setup.py install
 ```
 
