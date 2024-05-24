@@ -7,6 +7,7 @@ Similar to HOMER's findMotifsGenome.pl
 """
 
 import argparse
+import pyfaidx
 from . import myutils as myutils
 from mypileup import __version__
 from argparse import RawTextHelpFormatter
@@ -33,7 +34,7 @@ def main():
     # Input file, we want it to work on .bed files #
     parser.add_argument("inputfile", help=".bed file containing peaks", type=str)
 
-    parser.add_argument("-r", "--ref", help="fasta reference genome file", \
+    parser.add_argument("-f", "--fasta-ref", help="fasta reference genome file", \
                         metavar="FILE", type=str)
 
     # Other arguments
@@ -46,14 +47,30 @@ def main():
     parser.add_argument("-s", "--size", help="size of motif" \
                         "Default: 100", metavar="NUMERICAL SIZE VALUE", type=int, required=False)
 
+    parser.add_argument("--version", help="Print the version and quit", \
+		action="version", version = '{version}'.format(version=__version__))
+
     # Parse arguments here
     args = parser.parse_args()
+
+    if args.size is not None:
+		size = args.size
+	else:
+		size = 100
         
     # Setup output file
     if args.out is None:
         outf = sys.stdout
     else: 
         outf = open(args.out, "w")
+
+    # Load FASTA
+	if args.fasta_ref is not None:
+		if not os.path.exists(args.fasta_ref):
+			myutils.ERROR("{fasta} does not exist".format(fasta=args.fasta_ref))
+		reffasta = pyfaidx.Fasta(args.fasta_ref)
+	else:
+		myutils.ERROR("Fasta file not provided")
 
     # Load and parse BED using bed_reader
     filename = sample_file(args.inputfile)
