@@ -36,6 +36,9 @@ def main():
     
     parser.add_argument("-p", "--pval", help="p value threshold for motif sequences" \
                          "Default: 0.05", metavar="NUMERICAL P VALUE", type=float, required=False)
+    
+    parser.add_argument("-s", "--size", help="size of motif" \
+                        "Default: 100", metavar="NUMERICAL SIZE VALUE", type=int, required=False)
 
     # Parse arguments here
     args = parser.parse_args()
