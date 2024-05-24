@@ -2,6 +2,17 @@
 Utilities for mypileup
 """
 import sys
+import numpy as np
+import math
+import seqlogo
+import scipy
+import random
+from bed_reader import open_bed, sample_file
+from Bio import SeqIO
+from Bio.Seq import Seq 
+from Bio.SeqRecord import SeqRecord 
+from scipy.stats import fisher_exact
+
 
 def ERROR(msg):
 	"""
@@ -14,6 +25,85 @@ def ERROR(msg):
 	"""
 	sys.stderr.write("[ERROR]: " + "{msg}\n".format(msg=msg) )
 	sys.exit(1)
+
+def ExtractSequencesFromBed(bed_file, ref_genome_file):
+    """
+    Extract sequences from a reference genome based on BED file coordinates.
+
+    Parameters
+    ----------
+    bed_file : str
+        Path to the BED file containing coordinates.
+    ref_genome_file : str
+        Path to the reference genome in FASTA format.
+
+    Returns
+    -------
+    sequences : list of str
+        List of extracted sequences.
+    """
+    sequences = []
+
+    # Read reference genome
+    ref_genome = SeqIO.to_dict(SeqIO.parse(ref_genome_file, "fasta"))
+
+    # Read BED file and extract sequences
+    with open(bed_file, "r") as bed:
+        for line in bed:
+            if line.strip():
+                fields = line.strip().split()
+                chrom, start, end = fields[0], int(fields[1]), int(fields[2])
+                if chrom in ref_genome:
+                    seq_record = ref_genome[chrom]
+                    seq = seq_record.seq[start:end]
+                    sequences.append(str(seq))
+                else:
+                    print(f"Chromosome {chrom} not found in reference genome.")
+
+    return sequences
+
+def MotifEnrichmentAnalysis(bed_file, ref_genome_file, pwm_list, pwm_thresholds, background_freqs):
+    """
+    Perform motif enrichment analysis using sequences extracted from BED file.
+
+    Parameters
+    ----------
+    bed_file : str
+        Path to the BED file containing peak coordinates.
+    ref_genome_file : str
+        Path to the reference genome in FASTA format.
+    pwm_list : list of np.array
+        List of PWMs to be tested.
+    pwm_thresholds : list of float
+        List of thresholds corresponding to each PWM.
+    background_freqs : list of float
+        Background frequencies of A, C, G, T.
+
+    Returns
+    -------
+    results : list of tuple
+        List of tuples containing PWM index, threshold, number of peaks passing,
+        number of background sequences passing, and p-value.
+    """
+    peak_seqs = ExtractSequencesFromBed(bed_file, ref_genome_file)
+
+    # Generate background sequences
+    bg_seqs = [RandomSequence(len(peak_seqs[0]), background_freqs) for _ in range(len(peak_seqs))]
+
+    results = []
+
+    for i in range(len(pwm_list)):
+        pwm = pwm_list[i]
+        thresh = pwm_thresholds[i]
+
+        num_peak_pass = np.sum([int(FindMaxScore(pwm, seq) > thresh) for seq in peak_seqs])
+        num_bg_pass = np.sum([int(FindMaxScore(pwm, seq) > thresh) for seq in bg_seqs])
+
+        pval = ComputeEnrichment(len(peak_seqs), num_peak_pass, len(bg_seqs), num_bg_pass)
+
+        results.append((i, thresh, num_peak_pass, num_bg_pass, pval))
+
+    return results
 
 def GetPFM(sequences):
     """ Compute the PFM for a set of sequences
