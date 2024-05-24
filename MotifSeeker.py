@@ -323,8 +323,8 @@ def ComputeEnrichment(peak_total, peak_motif, bg_total, bg_motif):
     return pval
 
 # for i in range(len(PWMList)):
-    pwm = PWMList[i]
-    thresh = pwm_thresholds[i]
-    num_peak_pass = np.sum([int(FindMaxScore(pwm, seq)>thresh) for seq in peak_seqs])
-    num_bg_pass = np.sum([int(FindMaxScore(pwm, seq)>thresh) for seq in bg_seqs])
-    pval = ComputeEnrichment(len(peak_seqs), num_peak_pass, len(bg_seqs), num_bg_pass)
+    # pwm = PWMList[i]
+    # thresh = pwm_thresholds[i]
+    # num_peak_pass = np.sum([int(FindMaxScore(pwm, seq)>thresh) for seq in peak_seqs])
+    # num_bg_pass = np.sum([int(FindMaxScore(pwm, seq)>thresh) for seq in bg_seqs])
+    # pval = ComputeEnrichment(len(peak_seqs), num_peak_pass, len(bg_seqs), num_bg_pass)
