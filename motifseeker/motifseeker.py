@@ -1,8 +1,14 @@
-# Imports #
-# argparse: Python command line interface
-# numpy, bed_reader: Parse .bed file
+#!/usr/bin/env python
+
+"""
+Command-line script to perform motif enrichment analysis
+
+Similar to HOMER's findMotifsGenome.pl
+"""
 
 import argparse
+from . import myutils as myutils
+from mypileup import __version__
 from argparse import RawTextHelpFormatter
 import os
 import sys
@@ -12,8 +18,8 @@ import seqlogo
 import scipy
 import random
 from bed_reader import open_bed, sample_file
+import sys
 
-# To run MotifSeeker in terminal, `python MotifSeeker.py -h`
 # Here's how HOMER performs MEF (http://homer.ucsd.edu/homer/ngs/peakMotifs.html)
 
 # Variables/Objects required
