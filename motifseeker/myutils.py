@@ -7,6 +7,7 @@ import math
 import seqlogo
 import scipy
 import random
+import pandas as pd
 from bed_reader import open_bed, sample_file
 from Bio import SeqIO
 from Bio.Seq import Seq 
@@ -119,6 +120,7 @@ def GetPFM(sequences):
         
     Assumes all sequences have the same length
     """
+    nucs = ['A', 'C', 'G', 'T']
     pfm = np.zeros((4, len(sequences[0])))
     for seq in sequences:
         for j, char in enumerate(seq):
@@ -378,3 +380,31 @@ def ComputeEnrichment(peak_total, peak_motif, bg_total, bg_motif):
     # num_peak_pass = np.sum([int(FindMaxScore(pwm, seq)>thresh) for seq in peak_seqs])
     # num_bg_pass = np.sum([int(FindMaxScore(pwm, seq)>thresh) for seq in bg_seqs])
     # pval = ComputeEnrichment(len(peak_seqs), num_peak_pass, len(bg_seqs), num_bg_pass)
+
+
+# Hey so our motifs won't all be the same length. I'm gonna work on some code here. 
+
+# Splices reference genome using BED file.
+def spliceRef(bed_file):
+    """
+    From IUPAC notation:
+    A	Adenine
+    C	Cytosine
+    G	Guanine
+    T (or U)	Thymine (or Uracil)
+    R	A or G
+    Y	C or T
+    S	G or C
+    W	A or T
+    K	G or T
+    M	A or C
+    B	C or G or T
+    D	A or G or T
+    H	A or C or T
+    V	A or C or G
+    N	any base
+    . or -	gap
+    """
+
+    df = pd.read_csv(bed_file, sep='\t', comment='t', header=None)
+    print(df)
