@@ -6,14 +6,14 @@ This was created as a final project for Professor Melissa Gymrek's CSE 185 class
 
 `MotifSeeker` requires the following python libraries to be installed:
 - numpy
-- argparser
+- argparse
 - bed_reader
 - scipy
 - seqlogo
 
 They can be installed using `pip`:
 
-```pip install argparser numpy bed-reader scipy seqlogo```
+```pip install argparse numpy bed-reader scipy seqlogo```
 
 ### Install instructions
 
@@ -28,7 +28,7 @@ python setup.py install
 Note: if you do not have root access, you can run the commands above with additional options to install locally:
 
 ```
-pip install --user argparser numpy bed-reader scipy seqlogo
+pip install --user argparse numpy bed-reader scipy seqlogo
 python setup.py install --user
 ```
 
