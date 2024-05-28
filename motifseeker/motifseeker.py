@@ -8,9 +8,8 @@ Similar to HOMER's findMotifsGenome.pl
 
 import argparse
 import pyfaidx
-#from . import myutils as myutils
-import myutils as myutils
-#from mypileup import __version__
+from . import myutils as myutils
+from motifseeker import __version__
 from argparse import RawTextHelpFormatter
 import os
 import sys
