@@ -10,10 +10,11 @@ This was created as a final project for Professor Melissa Gymrek's CSE 185 class
 - bed_reader
 - scipy
 - seqlogo
+- biopython
 
 They can be installed using `pip`:
 
-```pip install argparse numpy bed-reader scipy seqlogo```
+```pip install argparse numpy bed-reader scipy seqlogo biopython```
 
 ### Install instructions
 
