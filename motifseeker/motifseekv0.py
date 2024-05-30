@@ -409,8 +409,15 @@ if args.out is None:
 else: 
         outf = open(args.out, "w")
 
-if (args.inputfile is not None):
-       print("Input file loaded...")
-if (args.genome is not None):
-       print("Genome file loaded...")
-READ(args.inputfile, args.genome)
+
+# Do something with input and genome file if they exist.
+if ((args.inputfile is not None) and (args.genome is not None)):
+       print("Input and Genome files loaded...")
+       sequences = ExtractSequencesFromBed(args.inputfile, args.genome)
+       pfms = GetPFM(sequences)
+       pwms = GetPWM(sequences)
+       
+
+
+
+
