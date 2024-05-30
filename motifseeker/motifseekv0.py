@@ -51,7 +51,7 @@ def ExtractSequencesFromBed(bed_file, ref_genome_file):
         for line in bed:
             if line.strip():
                 fields = line.strip().split()
-                chrom, start, end = fields[0], int(fields[1]), int(fields[2])
+                chrom, start, end = fields[0], int(fields[1]) - 1, int(fields[2])
                 if chrom in ref_genome:
                     seq_record = ref_genome[chrom]
                     seq = seq_record.seq[start:end]
@@ -413,11 +413,8 @@ else:
 # Do something with input and genome file if they exist.
 if ((args.inputfile is not None) and (args.genome is not None)):
 
-       sequences = ExtractSequencesFromBed(args.inputfile, args.genome)
+       sequences = ExtractSequencesFromBed(args.inputfile, args.genome) #fixed it nvm
 
-       # I think ExtractSequencesFromBed is starting its read from +1 nucleotide
-       # in smallbed.bed, we have chr1 1 - 5, but we get nucs 2 - 5 from test.fa
-       # exp: AGCTG out: GCTG, see print below:
        print(sequences)
 
 
