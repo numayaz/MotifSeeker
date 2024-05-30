@@ -48,7 +48,7 @@ The basic usage of `motifseeker` is:
 motifseeker <.bed file> <.fa ref genome file> [other options]
 ```
 
-To run mypileup on a small test example (using files in this repo):
+To run `motifseeker` on a small test example (using files in this repo):
 ```
 motifseeker example_files/test.bed example_files/test.fa
 ```
