@@ -9,6 +9,8 @@ from Bio import SeqIO
 from Bio.Seq import Seq 
 from Bio.SeqRecord import SeqRecord 
 from scipy.stats import fisher_exact
+import math
+import random
 
 nucs = {"A": 0, "C": 1, "G": 2, "T": 3}
 
@@ -118,12 +120,14 @@ def GetPFM(sequences):
         
     Assumes all sequences have the same length
     """
-    nucs = ['A', 'C', 'G', 'T']
+    nucs = {"A": 0, "C": 1, "G": 2, "T": 3}
     pfm = np.zeros((4, len(sequences[0])))
     for seq in sequences:
-        for j, char in enumerate(seq):
-            pfm[nucs[char], j] += 1
-
+        rowcount = 0
+        for nucleotide in seq:
+            print(rowcount)
+            pfm[nucs[nucleotide]][rowcount] += 1
+            rowcount += 1
     return pfm
 
 def GetPWM(binding_sites, background_freqs=[0.25, 0.25, 0.25, 0.25]):
@@ -413,7 +417,7 @@ else:
 # Do something with input and genome file if they exist.
 if ((args.inputfile is not None) and (args.genome is not None)):
 
-       sequences = ExtractSequencesFromBed(args.inputfile, args.genome) #fixed it nvm
+       sequences = ExtractSequencesFromBed(args.inputfile, args.genome)
 
        print(sequences)
 
