@@ -412,10 +412,19 @@ else:
 
 # Do something with input and genome file if they exist.
 if ((args.inputfile is not None) and (args.genome is not None)):
-       print("Input and Genome files loaded...")
+
        sequences = ExtractSequencesFromBed(args.inputfile, args.genome)
+
+       # I think ExtractSequencesFromBed is starting its read from +1 nucleotide
+       # in smallbed.bed, we have chr1 1 - 5, but we get nucs 2 - 5 from test.fa
+       # exp: AGCTG out: GCTG, see print below:
+       print(sequences)
+
+
        pfms = GetPFM(sequences)
        pwms = GetPWM(sequences)
+       print(pfms)
+       print(pwms)
        
 
 
