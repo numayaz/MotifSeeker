@@ -125,7 +125,6 @@ def GetPFM(sequences):
     for seq in sequences:
         rowcount = 0
         for nucleotide in seq:
-            print(rowcount)
             pfm[nucs[nucleotide]][rowcount] += 1
             rowcount += 1
     return pfm
