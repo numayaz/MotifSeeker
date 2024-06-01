@@ -5,7 +5,7 @@ This was created as a final project for Professor Melissa Gymrek's CSE 185 class
 ## WIP
 FOR TESTING:
 `motifseekv0 <bedfile> <fastagenome>`
-Do not follow installation below.
+Install necessary dependencies but do not follow installation of `motifseeker` below.
 
 ## Installation
 
