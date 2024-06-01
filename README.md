@@ -2,6 +2,11 @@
 
 This was created as a final project for Professor Melissa Gymrek's CSE 185 class at UCSD. MotifSeeker is a python command-line tool which aims to identify enriched motifs in the genome when provided reference genome and peak files. It aims to emulate some limited functionality of the HOMER python package.
 
+## WIP
+FOR TESTING:
+`motifseekv0 <bedfile> <fastagenome>`
+Do not follow installation below.
+
 ## Installation
 
 `MotifSeeker` requires the following python libraries to be installed:
