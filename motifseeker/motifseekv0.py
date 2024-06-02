@@ -117,8 +117,6 @@ def GetPFM(sequences):
     Returns
     -------
         pfm : 2d np.array
-        
-    Assumes all sequences have the same length
     """
     nucs = {"A": 0, "C": 1, "G": 2, "T": 3}
     pfms = []
