@@ -1,20 +1,20 @@
-"""
-Utilities for mypileup
-"""
+import argparse
+from argparse import RawTextHelpFormatter
+import os
 import sys
 import numpy as np
-import math
-import seqlogo
-import scipy
-import random
 import pandas as pd
-from bed_reader import open_bed, sample_file
+import scipy
 from Bio import SeqIO
 from Bio.Seq import Seq 
 from Bio.SeqRecord import SeqRecord 
 from scipy.stats import fisher_exact
+import math
+import random
 
+nucs = {"A": 0, "C": 1, "G": 2, "T": 3}
 
+##### Define functions here: #####
 def ERROR(msg):
 	"""
 	Print an error message and die
@@ -53,7 +53,7 @@ def ExtractSequencesFromBed(bed_file, ref_genome_file):
         for line in bed:
             if line.strip():
                 fields = line.strip().split()
-                chrom, start, end = fields[0], int(fields[1]), int(fields[2])
+                chrom, start, end = fields[0], int(fields[1]) - 1, int(fields[2])
                 if chrom in ref_genome:
                     seq_record = ref_genome[chrom]
                     seq = seq_record.seq[start:end]
@@ -117,16 +117,17 @@ def GetPFM(sequences):
     Returns
     -------
         pfm : 2d np.array
-        
-    Assumes all sequences have the same length
     """
-    nucs = ['A', 'C', 'G', 'T']
-    pfm = np.zeros((4, len(sequences[0])))
+    nucs = {"A": 0, "C": 1, "G": 2, "T": 3}
+    pfms = []
     for seq in sequences:
-        for j, char in enumerate(seq):
-            pfm[nucs[char], j] += 1
-
-    return pfm
+        pfm = np.zeros((4, len(seq)))
+        rowcount = 0
+        for nucleotide in seq:
+            pfm[nucs[nucleotide]][rowcount] += 1
+            rowcount += 1
+        pfms.append(pfm)
+    return pfms
 
 def GetPWM(binding_sites, background_freqs=[0.25, 0.25, 0.25, 0.25]):
     """ Compute the PWM for a set of binding sites
@@ -146,14 +147,14 @@ def GetPWM(binding_sites, background_freqs=[0.25, 0.25, 0.25, 0.25]):
     """
     pwm = np.zeros((4, len(binding_sites[0])))
     pfm = GetPFM(binding_sites)
-    pfm = pfm + 0.01 
-
-    for j in range(pfm.shape[1]):
-        col_sum = np.sum(pfm[:, j])
-        for i in range(4):
-            p_ij = pfm[i, j] / col_sum
-            pwm[i, j] = math.log2(p_ij / background_freqs[i])
-            
+    #pfm = pfm + 0.01 
+    for sequenceofarrays in pfm:
+         for seq in sequenceofarrays:
+            for num in seq: 
+                num += 0.01
+    for i in range(4):
+        for j in range(len(pfm[0])):
+            pwm[i][j] = math.log2((pfm[i,j]/np.sum(pfm[:,j])) / background_freqs[i])
     return pwm
 
 def ScoreSeq(pwm, sequence):
@@ -172,7 +173,6 @@ def ScoreSeq(pwm, sequence):
        PWM score of the sequence
     """
     score = 0
-    nucs = ['A', 'C', 'G', 'T']
     for i, nucleotide in enumerate(sequence):
         row_index = nucs[nucleotide]
         score += pwm[row_index, i]
@@ -375,37 +375,58 @@ def ComputeEnrichment(peak_total, peak_motif, bg_total, bg_motif):
     _, pval = scipy.stats.fisher_exact(table)
     return pval
 
-# for i in range(len(PWMList)):
-    # pwm = PWMList[i]
-    # thresh = pwm_thresholds[i]
-    # num_peak_pass = np.sum([int(FindMaxScore(pwm, seq)>thresh) for seq in peak_seqs])
-    # num_bg_pass = np.sum([int(FindMaxScore(pwm, seq)>thresh) for seq in bg_seqs])
-    # pval = ComputeEnrichment(len(peak_seqs), num_peak_pass, len(bg_seqs), num_bg_pass)
+
+    
+##################################
+
+# Create parser
+parser = argparse.ArgumentParser(prog="MotifSeeker", description= "Command-line tool to perform Motif Enrichment Analysis", formatter_class=RawTextHelpFormatter)
+
+# Input file, we want it to work on .bed files #
+parser.add_argument("inputfile", help=".bed file containing peaks", metavar ="FILE", type=str)
+
+parser.add_argument("genome", help="fasta reference genome file", \
+                        metavar="FILE", type=str)
+
+# Other arguments
+parser.add_argument("-o", "--out", help="Write output to file." \
+                        "Default: stdout", metavar="FILE", type=str, required=False)
+    
+parser.add_argument("-p", "--pval", help="p value threshold for motif sequences" \
+                         "Default: 0.05", metavar="NUMERICAL P VALUE", type=float, required=False)
+    
+parser.add_argument("-s", "--size", help="size of motif" \
+                        "Default: 100", metavar="NUMERICAL SIZE VALUE", type=int, required=False)
+
+# Parse arguments here
+args = parser.parse_args()
+
+if args.size is not None:
+        size = args.size
+else:
+        size = 100
+        
+# Setup output file
+if args.out is None:
+        outf = sys.stdout
+else: 
+        outf = open(args.out, "w")
 
 
-# Hey so our motifs won't all be the same length. I'm gonna work on some code here. 
+# Do something with input and genome file if they exist.
+if ((args.inputfile is not None) and (args.genome is not None)):
 
-# Compares to motif file
-def motifcomp(bed_file):
-    """
-    From IUPAC notation:
-    A	Adenine
-    C	Cytosine
-    G	Guanine
-    T (or U)	Thymine (or Uracil)
-    R	A or G
-    Y	C or T
-    S	G or C
-    W	A or T
-    K	G or T
-    M	A or C
-    B	C or G or T
-    D	A or G or T
-    H	A or C or T
-    V	A or C or G
-    N	any base
-    . or -	gap
-    """
+       sequences = ExtractSequencesFromBed(args.inputfile, args.genome)
 
-    df = pd.read_csv(bed_file, sep='\t', comment='t', header=None)
-    print(df)
+       print(sequences)
+
+
+       pfms = GetPFM(sequences)
+       pwms = GetPWM(sequences)
+       print(pfms)
+       print(pwms)
+       
+
+
+
+

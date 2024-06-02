@@ -1,0 +1,11 @@
+README.md
+setup.py
+motifseeker/__init__.py
+motifseeker/motifseeker.py
+motifseeker/myutils.py
+motifseeker/version.py
+motifseeker.egg-info/PKG-INFO
+motifseeker.egg-info/SOURCES.txt
+motifseeker.egg-info/dependency_links.txt
+motifseeker.egg-info/entry_points.txt
+motifseeker.egg-info/top_level.txt

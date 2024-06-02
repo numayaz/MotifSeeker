@@ -172,7 +172,6 @@ def ScoreSeq(pwm, sequence):
        PWM score of the sequence
     """
     score = 0
-    nucs = ['A', 'C', 'G', 'T']
     for i, nucleotide in enumerate(sequence):
         row_index = nucs[nucleotide]
         score += pwm[row_index, i]
@@ -385,8 +384,8 @@ def ComputeEnrichment(peak_total, peak_motif, bg_total, bg_motif):
 
 # Hey so our motifs won't all be the same length. I'm gonna work on some code here. 
 
-# Compares to motif file
-def motifcomp(bed_file):
+# Splices reference genome using BED file.
+def spliceRef(bed_file):
     """
     From IUPAC notation:
     A	Adenine
