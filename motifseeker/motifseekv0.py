@@ -121,13 +121,15 @@ def GetPFM(sequences):
     Assumes all sequences have the same length
     """
     nucs = {"A": 0, "C": 1, "G": 2, "T": 3}
-    pfm = np.zeros((4, len(sequences[0])))
+    pfms = []
     for seq in sequences:
+        pfm = np.zeros((4, len(seq)))
         rowcount = 0
         for nucleotide in seq:
             pfm[nucs[nucleotide]][rowcount] += 1
             rowcount += 1
-    return pfm
+        pfms.append(pfm)
+    return pfms
 
 def GetPWM(binding_sites, background_freqs=[0.25, 0.25, 0.25, 0.25]):
     """ Compute the PWM for a set of binding sites
